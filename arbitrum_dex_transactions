@@ -1,0 +1,8 @@
+SELECT
+  COUNT(tx_hash) AS transaction_count,
+  project
+FROM dex.trades
+WHERE blockchain = 'arbitrum'
+AND DATE(block_time) >= CURRENT_DATE - INTERVAL '365' DAY
+GROUP BY project
+ORDER BY transaction_count DESC;
