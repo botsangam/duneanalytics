@@ -1,0 +1,13 @@
+WITH arbitrum AS (
+  SELECT
+    DATE_TRUNC('day', block_time) AS date_time, /* Truncate to daily level for overall count */
+    "from" AS user,
+    hash AS total_transactions
+  FROM arbitrum.transactions
+  WHERE
+    success = TRUE AND block_time >= CURRENT_DATE - INTERVAL '365' day
+)
+SELECT
+  COUNT(DISTINCT total_transactions) AS "Total Arbitrum Transactions (Last 365 Days)",
+  COUNT(DISTINCT user) AS "Total Active Arbitrum Users (Last 365 Days)"
+FROM arbitrum
