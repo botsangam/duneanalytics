@@ -1,0 +1,20 @@
+SELECT
+  ROUND(
+    SUM(
+      CASE
+        WHEN "from" = 0x965d10e86E831E501C08659261bcAE5FAfe715DE
+        THEN value / POWER(10, 18)
+        WHEN "to" = 0x965d10e86E831E501C08659261bcAE5FAfe715DE
+        THEN -value / POWER(10, 18)
+        ELSE 0
+      END
+    ),
+    2
+  ) AS net_buy_amount
+FROM erc20_arbitrum.evt_Transfer
+WHERE
+  contract_address = 0xfbbb21d8e7A461f06e5E27efD69703aCB5C732A8
+  AND (
+    "from" = 0x965d10e86E831E501C08659261bcAE5FAfe715DE
+    OR "to" = 0x965d10e86E831E501C08659261bcAE5FAfe715DE
+  )
