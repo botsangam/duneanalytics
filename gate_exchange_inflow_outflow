@@ -1,0 +1,12 @@
+SELECT
+  DATE_TRUNC('day', evt_block_time) AS day,
+  SUM(CASE WHEN "from" = 0x0D0707963952f2fBA59dD06f2b425ace40b492Fe THEN 1 ELSE 0 END) AS outflow_count,
+  SUM(CASE WHEN "to" = 0x0D0707963952f2fBA59dD06f2b425ace40b492Fe THEN 1 ELSE 0 END) AS inflow_count
+FROM kunji_finance_arbitrum.KNJ_token_evt_Transfer
+WHERE
+  "from" = 0x0D0707963952f2fBA59dD06f2b425ace40b492Fe
+  OR "to" = 0x0D0707963952f2fBA59dD06f2b425ace40b492Fe
+GROUP BY
+  1
+ORDER BY
+  day
