@@ -1,0 +1,28 @@
+SELECT
+    user
+    , ROUND(amount, 2) as amount
+from (
+    SELECT
+        user
+        , sum(amount) / power(10, 18)  as amount
+    from (  
+        --mints
+        SELECT
+            cast(value as DOUBLE) as amount
+            , to as user
+        from erc20_arbitrum.evt_Transfer
+        where contract_address = 0xfbbb21d8e7A461f06e5E27efD69703aCB5C732A8 --knj token
+        
+        UNION all
+        
+        --burns
+        SELECT
+            (-1) * cast(value as DOUBLE) as amount
+            , "from" as user
+        from erc20_arbitrum.evt_Transfer
+        where contract_address = 0xfbbb21d8e7A461f06e5E27efD69703aCB5C732A8 --knj token
+    )x
+    GROUP by 1
+)y
+where amount > 2
+order by 2 desc
